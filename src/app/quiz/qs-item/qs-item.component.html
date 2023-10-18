@@ -1,0 +1,25 @@
+<ng-container>
+    <div class="row p-1 px-4 rounded">
+        <div class="col-md-12 my-2">
+          <div class="card p-2 rounded-pill bg-warning">
+            <p class="fw-bold text-center text-sm-center" style="font-size: 15px">
+             {{ questionProps.question }}
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6 my-2" *ngFor="let option of questionProps.options; index as i">
+          <button class="btn btn-outline-warning rounded-pill w-100 btn-lg" 
+          [ngClass]="{
+            'btn-success': selectedOptionIndex === i,
+            'btn-danger': selectedOptionIndex !== i && selectedOptionIndex !== -1 
+          }" 
+          (click)="submit(option, i)"
+          >
+           {{option}}
+          </button>
+        </div>
+    </div>
+    
+</ng-container>
+
+<!-- [ngClass]="{ 'correct': isCorrect }" -->

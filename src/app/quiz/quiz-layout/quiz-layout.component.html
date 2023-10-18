@@ -1,0 +1,52 @@
+<div class="layout d-flex position-relative">
+  <div class="user-headline d-flex position-absolute top-0 end-0">
+    <div class="card bg-transparent p-2">
+      <p class="my-auto p-1 lead text-light">
+        Welcome <strong>{{ username }} </strong>
+      </p>
+    </div>
+    <div class="btn btn-outline-danger border-0 p-3 m-1" [routerLink]="['/']">
+      <fa-icon class="fs-5" [icon]="exitBtn"></fa-icon>
+    </div>
+  </div>
+  <div class="side-bar m-3">
+    <div class="question-list">
+      <ul class="nav flex-column ms-0">
+        <button
+          class="btn btn-outline-warning btn-lg m-2"
+          [ngClass]="{ active: qsNum === tab }"
+          *ngFor="let tab of questionTab; let i = index"
+          (click)="openContent(tab, i)"
+        >
+          {{ tab }}
+        </button>
+      </ul>
+    </div>
+  </div>
+
+  <div
+    class="content border border-light col-md-6 col-10 p-4 position-absolute top-50 start-50 translate-middle"
+  >
+    <h5 class="display-6 text-center text-warning m-0">{{ qsNum }}</h5>
+    <app-qs-item [question]="currentQs"></app-qs-item>
+    <div class="d-flex justify-content-between p-1">
+      <button
+        class="btn btn-outline-light btn-lg"
+        type="button"
+        [disabled]="index === 0"
+        (click)="changeQs('prev')"
+      >
+        Previous Question
+      </button>
+      <button
+        class="btn btn-outline-light btn-lg"
+        type="button"
+        [disabled]="index + 1 === questionTab.length"
+        (click)="changeQs('next')"
+        (focus)="false"
+      >
+        Next Question
+      </button>
+    </div>
+  </div>
+</div>
