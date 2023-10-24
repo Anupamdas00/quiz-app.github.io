@@ -11,12 +11,12 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 @NgModule({
   declarations: [
     AppComponent,
-    RootComponent
+    RootComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   providers: [AuthGuard, AuthGuardQuiz, DeactivateGuard],
   bootstrap: [AppComponent]

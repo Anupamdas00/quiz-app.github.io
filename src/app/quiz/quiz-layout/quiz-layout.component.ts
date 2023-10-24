@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { quizQuestions } from '../../data';
 import { AppService } from 'src/app/service/app.service';
 import { IDeactivate } from 'src/app/guard/interface/canDeactive.interface';
@@ -10,7 +10,7 @@ import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './quiz-layout.component.html',
   styleUrls: ['./quiz-layout.component.css'],
 })
-export class QuizLayoutComponent implements OnInit, IDeactivate {
+export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
 
   constructor(private appService : AppService) {}
 
@@ -22,6 +22,8 @@ export class QuizLayoutComponent implements OnInit, IDeactivate {
   username : string | undefined;
   exitBtn = faRightFromBracket;
   disable!:boolean;
+  quizStart: boolean = true;
+  disableIndexArr : number[] = []
 
   ngOnInit(): void {
     this.currentQs = this.data[0]
@@ -33,12 +35,8 @@ export class QuizLayoutComponent implements OnInit, IDeactivate {
       
     this.username = this.appService.getLocalStorageData() || 'Candidate';
 
-    // this.appService.name.asObservable().subscribe(res => console.log(res))
-    console.warn(this.index);
-    
+    this.appService.qsSelected.subscribe(res => console.log('if answer selected', res))
   }
-
-
 
   openContent(tabName: string, index: number) {
     this.qsNum = tabName;
@@ -46,18 +44,13 @@ export class QuizLayoutComponent implements OnInit, IDeactivate {
     this.currentQs = this.data[this.index]  
   }
 
-  changeQs(changeOption : string){
-    if(changeOption === 'next'){
-      this.index++
-      this.qsNum = this.questionTab[this.index]
-      this.currentQs = this.data[this.index]
-      // this.disable = this.questionTab.length <= (this.index + 1) ? false : true;
-    } else if(changeOption === 'prev'){
-      this.index--
-      this.qsNum = this.questionTab[this.index]
-      this.currentQs = this.data[this.index]
-      // this.disable = this.index < 0 ? true
+  nextQs(){
+    this.index++;
+    if(this.disableIndexArr.includes(this.index)){
+      this.index++;
     }
+    this.qsNum = this.questionTab[this.index]
+    this.currentQs = this.data[this.index]
   }
 
   canExit(): boolean{
@@ -69,6 +62,27 @@ export class QuizLayoutComponent implements OnInit, IDeactivate {
     }
   }
 
+  startQuiz(event : boolean){
+    this.quizStart = event;
+  }
+
+  ngAfterViewInit(): void {
+    console.log('triggered after view');
+    
+  }
+
+  ifSelected(event : boolean){
+    this.disable = event;
+    this.disableIndexArr.push(this.index);
+  }
+
+  disableButton(index:number) : boolean{
+    if(this.disable && this.disableIndexArr.includes(index)){
+      return true;
+    }else{
+      return false;
+    }
+  }
 
 
 }

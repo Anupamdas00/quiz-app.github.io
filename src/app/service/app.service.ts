@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, BehaviorSubject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +7,8 @@ import { Observable, Subject, of } from 'rxjs';
 export class AppService {
   data : string = '';
   name : Subject<string> = new Subject;
-  // name : Observable<string> = new Observable()
+  isQsSelected$: BehaviorSubject<boolean> = new BehaviorSubject(false)
+  qsSelected = this.isQsSelected$.asObservable();
 
   constructor() { }
 
@@ -23,5 +24,8 @@ export class AppService {
     this.name.next(data);
   }
 
+  ifQsSelected(value : boolean){
+    return this.isQsSelected$.next(value);
+  }
   
 }

@@ -8,12 +8,20 @@
 }
 
 .correct{
-    background-color: rgb(2, 96, 2);
-    color: white;
+    background-color: rgb(33, 154, 20);
+    color: rgb(0, 0, 0);
     outline: none;
 }
 
 .wrong{
-    background-color: rgb(154, 7, 7);
-    color: white;
+    background-color: rgb(182, 3, 3);
+    color: rgb(0, 0, 0);
+    outline: none;
 }
+
+/* .option p:hover{
+    background-color: black ;
+    transition: 0.3s;
+    transform: scale(1.02); 
+    font-size: 1.02rem;    
+} */

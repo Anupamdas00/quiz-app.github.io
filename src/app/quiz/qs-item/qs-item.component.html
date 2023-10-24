@@ -1,25 +1,29 @@
 <ng-container>
-    <div class="row p-1 px-4 rounded">
-        <div class="col-md-12 my-2">
-          <div class="card p-2 rounded-pill bg-warning">
-            <p class="fw-bold text-center text-sm-center" style="font-size: 15px">
-             {{ questionProps.question }}
-            </p>
-          </div>
-        </div>
-        <div class="col-md-6 my-2" *ngFor="let option of questionProps.options; index as i">
-          <button class="btn btn-outline-warning rounded-pill w-100 btn-lg" 
-          [ngClass]="{
-            'btn-success': selectedOptionIndex === i,
-            'btn-danger': selectedOptionIndex !== i && selectedOptionIndex !== -1 
-          }" 
-          (click)="submit(option, i)"
-          >
-           {{option}}
-          </button>
-        </div>
+  <div class="row p-1 px-4 rounded">
+    <div class="col-md-12 my-2">
+      <div class="card p-2 rounded-pill bg-warning py-3">
+        <p class="fw-bold text-center text-sm-center" style="font-size: 15px">
+          {{ questionProps.question }}
+        </p>
+      </div>
     </div>
-    
+    <div
+      class="option col-md-6 my-2"
+      *ngFor="let option of questionProps.options; index as i"
+    >
+      <button
+        class=" btn w-100 rounded-pill py-3"
+        type="button"
+        [ngClass]="{
+          'btn-outline-warning': selectedOptionIndex !== i,
+          'btn-success': selectedOptionIndex === i && isOptionCorrect,
+          'btn-danger': selectedOptionIndex === i && !isOptionCorrect
+        }"
+        [disabled]="questionProps.isSelected"
+        (click)="submit(option, i)"
+      >
+        {{ option }}
+      </button>
+    </div>
+  </div>
 </ng-container>
-
-<!-- [ngClass]="{ 'correct': isCorrect }" -->
