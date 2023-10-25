@@ -23,7 +23,11 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   exitBtn = faRightFromBracket;
   disable!:boolean;
   quizStart: boolean = true;
-  disableIndexArr : number[] = []
+  disableIndexArr : number[] = [];
+  totalTimeSec! : number;
+  totalTimeMin! : number;
+  time! : string;
+  totalPercent : number = 0;
 
   ngOnInit(): void {
     this.currentQs = this.data[0]
@@ -36,6 +40,7 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
     this.username = this.appService.getLocalStorageData() || 'Candidate';
 
     this.appService.qsSelected.subscribe(res => console.log('if answer selected', res))
+    // console.log(parseFloat(this.totalTimeMin));
   }
 
   openContent(tabName: string, index: number) {
@@ -64,11 +69,12 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
 
   startQuiz(event : boolean){
     this.quizStart = event;
+    this.calculateTime()
+
   }
 
   ngAfterViewInit(): void {
     console.log('triggered after view');
-    
   }
 
   ifSelected(event : boolean){
@@ -82,6 +88,39 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
     }else{
       return false;
     }
+  }
+
+  calculateTime(){
+    // this.totalTimeMin = parseFloat((this.totalTimeSec / 60).toFixed(2))
+    this.totalTimeSec = Math.floor(this.data.length * 10)
+    console.log(this.totalTimeSec / 100);
+    let onePercent = 100 / this.totalTimeSec;
+    let min = Math.floor(this.totalTimeSec / 60);
+    let sec = this.totalTimeSec % 60; 
+    let timeUp = false
+
+    let interVal = setInterval(() => {  
+      sec = sec - 1;
+      this.totalPercent = Number((onePercent + this.totalPercent).toFixed(2));
+
+      if(timeUp){
+          clearInterval(interVal);
+          return;
+      }
+
+      if(min == 0 && sec == 0){
+        timeUp = true;
+        this.time = 'Time Up'    
+      }else if(sec <= 0){
+        min = min - 1;
+        sec = 59
+      }
+
+      
+      this.time = `${min} Minute ${sec} Seconds`
+    },1000)
+
+    
   }
 
 
