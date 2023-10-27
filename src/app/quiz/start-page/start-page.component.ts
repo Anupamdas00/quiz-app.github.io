@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-start-page',
@@ -8,13 +8,15 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 export class StartPageComponent implements OnInit {
 
   @Output()event : EventEmitter<boolean> = new EventEmitter()
+  @Input()timeFinished!: boolean
 
 
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.timeFinished);
+    
   }
-
 
   startQuiz(){
     this.event.emit(false);  

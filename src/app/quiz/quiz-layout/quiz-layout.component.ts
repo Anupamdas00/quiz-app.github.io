@@ -4,6 +4,7 @@ import { AppService } from 'src/app/service/app.service';
 import { IDeactivate } from 'src/app/guard/interface/canDeactive.interface';
 import { Observable } from 'rxjs';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-quiz-layout',
@@ -28,6 +29,7 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   totalTimeMin! : number;
   time! : string;
   totalPercent : number = 0;
+  timeFinished : boolean = false;
 
   ngOnInit(): void {
     this.currentQs = this.data[0]
@@ -61,6 +63,12 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   canExit(): boolean{
     if(window.confirm('Do You Want To Exit Quiz')){
       localStorage.removeItem('user');
+      this.data.forEach((item : any) => {
+        if(item.isSelected == true){
+          delete item.isSelected;
+        }
+      })
+   
       return true;
     }else{
       return false
@@ -89,38 +97,37 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
       return false;
     }
   }
-
+  
   calculateTime(){
-    // this.totalTimeMin = parseFloat((this.totalTimeSec / 60).toFixed(2))
-    this.totalTimeSec = Math.floor(this.data.length * 10)
+    this.totalTimeSec = Math.floor(this.data.length)
     console.log(this.totalTimeSec / 100);
     let onePercent = 100 / this.totalTimeSec;
     let min = Math.floor(this.totalTimeSec / 60);
     let sec = this.totalTimeSec % 60; 
     let timeUp = false
-
+    
     let interVal = setInterval(() => {  
       sec = sec - 1;
       this.totalPercent = Number((onePercent + this.totalPercent).toFixed(2));
 
       if(timeUp){
-          clearInterval(interVal);
-          return;
+        this.timeFinished = true;
+        this.quizStart = true
+        clearInterval(interVal);
+        return;
       }
 
       if(min == 0 && sec == 0){
         timeUp = true;
-        this.time = 'Time Up'    
-      }else if(sec <= 0){
+        this.time = 'Time Up' 
+        return;   
+      }else if(sec < 0){
         min = min - 1;
         sec = 59
-      }
-
-      
+      }   
       this.time = `${min} Minute ${sec} Seconds`
     },1000)
-
-    
+  
   }
 
 

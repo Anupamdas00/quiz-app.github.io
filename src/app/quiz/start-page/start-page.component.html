@@ -1,9 +1,18 @@
 <div class="backdrop"></div>
-<div class="start-info d-flex align-items-center justify-content-center col-md-4 col-10">
-    <div class="card w-100 bg-transparent border border-0 p-3">
+<div class="start-info d-flex align-items-center justify-content-center col-10">
+    <div class="card bg-transparent border border-0 p-3" *ngIf="!timeFinished, else result">
         <p class="fs-5 lead text-center">
-            There is 10 Question. Each question has 10 of Second Timing.
+            There is 10 Question. Each question has 10 of Second Timing. sdjsjbsjbdc csjcsjbcsjbhcs csjcb sjc
         </p>
         <button class="btn btn-primary w-50 mx-auto" (click)="startQuiz()">Let's Go</button>
     </div>
+    <ng-template #result>
+        <div class="card bg-transparent p-4 border border-0">
+            <p class="lead text-center">
+                Your Score 2.3/10
+            </p>
+        </div>
+    </ng-template>
 </div>
+
+

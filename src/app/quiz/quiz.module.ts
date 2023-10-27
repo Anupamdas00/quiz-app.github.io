@@ -7,6 +7,7 @@ import { QsItemComponent } from './qs-item/qs-item.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { StartPageComponent } from './start-page/start-page.component';
 import { OptionsStyleDirective } from './directives/options-style.directive';
+import { QuizResultComponent } from './quiz-result/quiz-result.component';
 
 
 
@@ -16,7 +17,8 @@ import { OptionsStyleDirective } from './directives/options-style.directive';
     QuizLayoutComponent,
     QsItemComponent,
     StartPageComponent,
-    OptionsStyleDirective
+    OptionsStyleDirective,
+    QuizResultComponent
   ],
   imports: [
     CommonModule,

@@ -1,5 +1,5 @@
 <div class="layout d-flex position-relative">
-<app-start-page  *ngIf="quizStart" (event)="startQuiz($event)" ></app-start-page>
+<app-start-page  *ngIf="quizStart" (event)="startQuiz($event)" [timeFinished]="timeFinished"></app-start-page>
 
   <div class="user-headline d-flex position-absolute top-0 end-0">
     <div class="card bg-transparent p-2">
@@ -42,7 +42,7 @@
     <app-qs-item [question]="currentQs" (isSelectedEvent)="ifSelected($event)"></app-qs-item>
 
     <div class="d-flex justify-content-between align-items-end p-1">
-      <p class="text-start text-light" >
+      <p class="text-start text-light">
         <strong> {{index + 1}} </strong> of {{data.length}} questions.
       </p>
       <button
