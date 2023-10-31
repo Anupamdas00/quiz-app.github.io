@@ -1,5 +1,5 @@
 <div class="layout d-flex position-relative">
-<app-start-page  *ngIf="quizStart" (event)="startQuiz($event)" [timeFinished]="timeFinished"></app-start-page>
+<app-start-page  *ngIf="quizStart" (event)="startQuiz($event)" [qsInfo]="questionInfo" [timeFinished]="timeFinished"></app-start-page>
 
   <div class="user-headline d-flex position-absolute top-0 end-0">
     <div class="card bg-transparent p-2">

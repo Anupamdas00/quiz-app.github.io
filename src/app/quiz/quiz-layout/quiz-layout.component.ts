@@ -2,9 +2,9 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { quizQuestions } from '../../data';
 import { AppService } from 'src/app/service/app.service';
 import { IDeactivate } from 'src/app/guard/interface/canDeactive.interface';
-import { Observable } from 'rxjs';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { trigger } from '@angular/animations';
+import { IQuestionInfo } from 'src/app/guard/interface/questionInfo.interface'; 
+import { Question } from '../quiz.class';
 
 @Component({
   selector: 'app-quiz-layout',
@@ -25,15 +25,29 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   disable!:boolean;
   quizStart: boolean = true;
   disableIndexArr : number[] = [];
-  totalTimeSec! : number;
+  totalTimeSec! : number
   totalTimeMin! : number;
   time! : string;
   totalPercent : number = 0;
   timeFinished : boolean = false;
+  totalNumOfQs! : number;
+  questionInfo: IQuestionInfo = new Question()
+  totalTime! : string;
+  sec! : number;
+  min! : number;
+
 
   ngOnInit(): void {
     this.currentQs = this.data[0]
     this.index = 0;
+    this.totalNumOfQs = this.data.length;
+    this.totalTimeSec = Math.floor(this.data.length);
+    
+    this.sec = Math.floor(this.totalTimeSec % 60);
+    this.min = Math.floor(this.totalTimeSec / 60);
+
+    this.questionInfo.questions = this.totalNumOfQs;
+    this.questionInfo.totalTime = `${this.min} Minute ${this.sec} Seconds`;
 
    this.questionTab = new Array(this.data.length)
       .fill(0)
@@ -42,7 +56,7 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
     this.username = this.appService.getLocalStorageData() || 'Candidate';
 
     this.appService.qsSelected.subscribe(res => console.log('if answer selected', res))
-    // console.log(parseFloat(this.totalTimeMin));
+
   }
 
   openContent(tabName: string, index: number) {
@@ -77,8 +91,7 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
 
   startQuiz(event : boolean){
     this.quizStart = event;
-    this.calculateTime()
-
+    this.calculateTime();
   }
 
   ngAfterViewInit(): void {
@@ -99,15 +112,11 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   }
   
   calculateTime(){
-    this.totalTimeSec = Math.floor(this.data.length)
-    console.log(this.totalTimeSec / 100);
     let onePercent = 100 / this.totalTimeSec;
-    let min = Math.floor(this.totalTimeSec / 60);
-    let sec = this.totalTimeSec % 60; 
     let timeUp = false
-    
+
     let interVal = setInterval(() => {  
-      sec = sec - 1;
+      this.sec = this.sec - 1;
       this.totalPercent = Number((onePercent + this.totalPercent).toFixed(2));
 
       if(timeUp){
@@ -117,15 +126,16 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
         return;
       }
 
-      if(min == 0 && sec == 0){
+      if(this.min == 0 && this.sec == 0){
         timeUp = true;
         this.time = 'Time Up' 
         return;   
-      }else if(sec < 0){
-        min = min - 1;
-        sec = 59
+      }else if(this.sec < 0){
+        this.min = this.min - 1;
+        this.sec = 59
       }   
-      this.time = `${min} Minute ${sec} Seconds`
+      this.time = `${this.min} Minute ${this.sec} Seconds`
+      this.totalTime = this.time
     },1000)
   
   }

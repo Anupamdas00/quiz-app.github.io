@@ -1,18 +1,27 @@
 <div class="backdrop"></div>
-<div class="start-info d-flex align-items-center justify-content-center col-10">
-    <div class="card bg-transparent border border-0 p-3" *ngIf="!timeFinished, else result">
-        <p class="fs-5 lead text-center">
-            There is 10 Question. Each question has 10 of Second Timing. sdjsjbsjbdc csjcsjbcsjbhcs csjcb sjc
-        </p>
+<div class="start-info d-flex align-items-center justify-content-center col-md-6">
+    <div class="card bg-transparent border border-0 p-3" *ngIf="false, else result">
+        <div class="card-title text-center fs-2">
+            Quiz rules
+        </div>
+        <ul class="list-unstyled lead">
+            <ul>
+                <li>Total {{qsInfo.questions}} Questions to attempt </li>
+                <li> Total duration : <strong>  {{qsInfo.totalTime}}  </strong></li>
+                <li>Start when you are ready!</li>
+            </ul>
+        </ul>
         <button class="btn btn-primary w-50 mx-auto" (click)="startQuiz()">Let's Go</button>
     </div>
-    <ng-template #result>
-        <div class="card bg-transparent p-4 border border-0">
-            <p class="lead text-center">
-                Your Score 2.3/10
-            </p>
-        </div>
-    </ng-template>
 </div>
+<ng-template #result>
+    <div class="result border border-0 rounded">
+        <h5 class="display-6 text-center">Congratulation! Check Your Score</h5>
+        <p class="text-center">
+            Your Score 2.3/10
+        </p>
+        <button class="btn btn-outline-danger" [routerLink]="['/']"> Exit Quiz </button>
+    </div>
+</ng-template>
 
 
