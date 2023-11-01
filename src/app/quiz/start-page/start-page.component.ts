@@ -1,5 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IQuestionInfo } from 'src/app/guard/interface/questionInfo.interface';
+import { AppService } from 'src/app/service/app.service';
 
 @Component({
   selector: 'app-start-page',
@@ -8,18 +10,21 @@ import { IQuestionInfo } from 'src/app/guard/interface/questionInfo.interface';
 })
 export class StartPageComponent implements OnInit {
 
-  @Output()event : EventEmitter<boolean> = new EventEmitter()
+  @Output()event : EventEmitter<boolean> = new EventEmitter();
   @Input()timeFinished!: boolean;
   @Input()qsInfo! : IQuestionInfo;
   totalNumQs! : number;
-  minute!: number;
-  second!:number
+  correctLyAns! : number;
+  correctAns$! : Observable<number>
 
-  constructor() { }
+  constructor( private appService: AppService ) {}
 
   ngOnInit(): void {
-    console.log(this.timeFinished);
-    console.log(this.qsInfo);
+    this.totalNumQs = this.qsInfo.questions;
+    if(this.timeFinished){
+      this.correctAns$ = this.appService.correctAnswer$
+    }
+
 
   }
 

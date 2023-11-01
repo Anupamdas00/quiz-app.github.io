@@ -1,26 +1,28 @@
 <div class="backdrop"></div>
-<div class="start-info d-flex align-items-center justify-content-center col-md-6">
-    <div class="card bg-transparent border border-0 p-3" *ngIf="false, else result">
+<div class="start-info d-flex align-items-center justify-content-center col-md-6 col-12">
+    <div class="card bg-transparent border border-0 p-3" *ngIf="!timeFinished, else result">
         <div class="card-title text-center fs-2">
             Quiz rules
         </div>
         <ul class="list-unstyled lead">
-            <ul>
-                <li>Total {{qsInfo.questions}} Questions to attempt </li>
+                <li>You have {{qsInfo.questions}} Questions to attempt </li>
                 <li> Total duration : <strong>  {{qsInfo.totalTime}}  </strong></li>
+                <li> For Correct answer 1 point for each. No negetive point for wrong answer.</li>
                 <li>Start when you are ready!</li>
-            </ul>
         </ul>
-        <button class="btn btn-primary w-50 mx-auto" (click)="startQuiz()">Let's Go</button>
+        <button class="btn btn-primary w-50 mx-auto" (click)="startQuiz()">Start Quiz</button>
     </div>
 </div>
 <ng-template #result>
-    <div class="result border border-0 rounded">
-        <h5 class="display-6 text-center">Congratulation! Check Your Score</h5>
-        <p class="text-center">
-            Your Score 2.3/10
+    <div class="result border border-0 rounded text-center">
+        <h5 class="display-6 ">Check Your Score</h5>
+        <p class="">
+            You have answered {{correctAns$ | async}} question correctly.
         </p>
-        <button class="btn btn-outline-danger" [routerLink]="['/']"> Exit Quiz </button>
+        <p class="lead">
+            Your Score : {{correctAns$ | async}}/{{totalNumQs}}
+        </p>
+        <button class="btn btn-danger mx-auto" [routerLink]="['/']"> Exit Quiz </button>
     </div>
 </ng-template>
 

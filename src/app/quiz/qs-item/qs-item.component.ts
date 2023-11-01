@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   Input,
-  OnChanges,
   SimpleChanges,
   EventEmitter,
   Output
@@ -42,12 +41,12 @@ export class QsItemComponent implements OnInit {
 
     if(optionSelected == this.questionProps.correctAnswer){
       this.answeredCorrectly += 1;
+      this.appService.rightAnswer(this.answeredCorrectly);
     }
 
     if(this.questionProps.isSelected){
       this.isSelectedEvent.emit(this.questionProps.isSelected)
-    }
-    // console.log(this.answeredCorrectly);   
+    }  
   }
 
 }

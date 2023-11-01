@@ -6,9 +6,10 @@ import { Observable, Subject, BehaviorSubject} from 'rxjs';
 })
 export class AppService {
   data : string = '';
-  name : Subject<string> = new Subject;
+  name : Subject<string> = new Subject();
   isQsSelected$: BehaviorSubject<boolean> = new BehaviorSubject(false)
   qsSelected = this.isQsSelected$.asObservable();
+  correctAnswer$ : BehaviorSubject<number> = new BehaviorSubject(0)
 
   constructor() { }
 
@@ -27,5 +28,11 @@ export class AppService {
   ifQsSelected(value : boolean){
     return this.isQsSelected$.next(value);
   }
+
+  rightAnswer(value: number) : void{
+    this.correctAnswer$.next(value)
+  }
   
+  
+
 }

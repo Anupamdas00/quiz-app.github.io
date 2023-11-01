@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { quizQuestions } from '../../data';
 import { AppService } from 'src/app/service/app.service';
 import { IDeactivate } from 'src/app/guard/interface/canDeactive.interface';
@@ -11,7 +11,7 @@ import { Question } from '../quiz.class';
   templateUrl: './quiz-layout.component.html',
   styleUrls: ['./quiz-layout.component.css'],
 })
-export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
+export class QuizLayoutComponent implements OnInit, IDeactivate, OnDestroy{
 
   constructor(private appService : AppService) {}
 
@@ -35,13 +35,15 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   totalTime! : string;
   sec! : number;
   min! : number;
+  timeUp : boolean = false;
+  interval! : any;
 
 
   ngOnInit(): void {
     this.currentQs = this.data[0]
     this.index = 0;
     this.totalNumOfQs = this.data.length;
-    this.totalTimeSec = Math.floor(this.data.length);
+    this.totalTimeSec = Math.floor(this.data.length * 10);
     
     this.sec = Math.floor(this.totalTimeSec % 60);
     this.min = Math.floor(this.totalTimeSec / 60);
@@ -56,7 +58,11 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
     this.username = this.appService.getLocalStorageData() || 'Candidate';
 
     this.appService.qsSelected.subscribe(res => console.log('if answer selected', res))
+  }
 
+
+  ngOnDestroy(): void {
+    clearInterval(this.interval)
   }
 
   openContent(tabName: string, index: number) {
@@ -75,7 +81,7 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   }
 
   canExit(): boolean{
-    if(window.confirm('Do You Want To Exit Quiz')){
+    if(window.confirm('Are You Sure To Exit Quiz?')){
       localStorage.removeItem('user');
       this.data.forEach((item : any) => {
         if(item.isSelected == true){
@@ -94,10 +100,6 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
     this.calculateTime();
   }
 
-  ngAfterViewInit(): void {
-    console.log('triggered after view');
-  }
-
   ifSelected(event : boolean){
     this.disable = event;
     this.disableIndexArr.push(this.index);
@@ -113,21 +115,22 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
   
   calculateTime(){
     let onePercent = 100 / this.totalTimeSec;
-    let timeUp = false
 
-    let interVal = setInterval(() => {  
+    this.interval = setInterval(() => {
+      console.log('running serInterval');
+        
       this.sec = this.sec - 1;
       this.totalPercent = Number((onePercent + this.totalPercent).toFixed(2));
 
-      if(timeUp){
+      if(this.timeUp){
         this.timeFinished = true;
         this.quizStart = true
-        clearInterval(interVal);
+        clearInterval(this.interval);
         return;
       }
 
       if(this.min == 0 && this.sec == 0){
-        timeUp = true;
+        this.timeUp = true;
         this.time = 'Time Up' 
         return;   
       }else if(this.sec < 0){
@@ -135,9 +138,13 @@ export class QuizLayoutComponent implements OnInit, IDeactivate, AfterViewInit{
         this.sec = 59
       }   
       this.time = `${this.min} Minute ${this.sec} Seconds`
-      this.totalTime = this.time
+      // this.totalTime = this.time
     },1000)
   
+  }
+
+  submitAns(){
+    this.timeUp = true;
   }
 
 
